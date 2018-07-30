@@ -1,0 +1,3 @@
+ERROR from element source22642081: Internal data flow error.
+Debugging info: gstbasesrc.c(2948): gst_base_src_loop (): /GstPipeline:pipeline/GstBin:sourcebin22642081/GstAppSrc:source22642081:
+

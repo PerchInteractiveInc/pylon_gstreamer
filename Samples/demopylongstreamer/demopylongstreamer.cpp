@@ -75,8 +75,12 @@
 #include "../../InstantCameraAppSrc/CInstantCameraAppSrc.h"
 #include "CPipelineHelper.h"
 #include <gst/gst.h>
+#include <fstream>
+#include "json.hpp"
+
 
 using namespace std;
+using json = nlohmann::json;
 
 int exitCode = 0;
 
@@ -191,6 +195,49 @@ string ipaddress = "";
 string filename = "";
 string fbdev = "";
 string pipelineString = "";
+json configFile;
+
+// Including all options to configure the camera
+string exposureAuto = "";
+string balanceWhiteAuto = "";
+string gainAuto = "";
+string pixelFormat = "";
+string lightSourcePreset = "";
+string gainSelector = "";
+double gain = -1;
+double gammaValue = -1;
+double redBalanceRatio = -1;
+double greenBalanceRatio = -1;
+double blueBalanceRatio = -1;
+double redColorAdjustmentHue = -1;
+double yellowColorAdjustmentHue = -1;
+double greenColorAdjustmentHue = -1;
+double cyanColorAdjustmentHue = -1;
+double blueColorAdjustmentHue = -1;
+double magnetaColorAdjustmentHue = -1;
+double redColorAdjustmentSaturation = -1;
+double yellowColorAdjustmentSaturation = -1;
+double greenColorAdjustmentSaturation = -1;
+double cyanColorAdjustmentSaturation = -1;
+double blueColorAdjustmentSaturation = -1;
+double magentaColorAdjustmentSaturation = -1;
+string colorTransformationSelector = "";
+double gain00ColorTransformationValue = -1;
+double gain01ColorTransformationValue = -1;
+double gain02ColorTransformationValue = -1;
+double gain10ColorTransformationValue = -1;
+double gain11ColorTransformationValue = -1;
+double gain12ColorTransformationValue = -1;
+double gain20ColorTransformationValue = -1;
+double gain21ColorTransformationValue = -1;
+double gain22ColorTransformationValue = -1;
+double autoTargetBrightness = -1;
+string autoFunctionProfile = "";
+double autoGainLowerLimit = -1;
+double autoGainUpperLimit = -1;
+double autoExposureTimeLowerLimit = -1;
+double autoExposureTimeUpperLimit = -1;
+
 
 int ParseCommandLine(gint argc, gchar *argv[])
 {
@@ -264,6 +311,54 @@ int ParseCommandLine(gint argc, gchar *argv[])
 					cout << "Serial number not specified. eg: -camera 21045367" << endl;
 					return -1;
 				}
+			}
+			if (string(argv[i]) == "-json")
+			{
+				std::ifstream i("config.json");
+				i >> configFile;
+				exposureAuto = configFile["ExposureAuto"];
+				balanceWhiteAuto = configFile["BalanceWhiteAuto"];
+				gainAuto = configFile["GainAuto"];
+				width =  configFile["Width"];
+				height =  configFile["Height"];
+				frameRate =  configFile["FrameRate"];
+				pixelFormat = configFile["PixelFormat"];
+				gainSelector = configFile["GainSelector"];				
+				gain = configFile["Gain"];
+				gammaValue = configFile["Gamma"];
+				lightSourcePreset = configFile["LightSourcePreset"];
+				redBalanceRatio = configFile["RedBalanceRatio"];
+				greenBalanceRatio = configFile["GreenBalanceRatio"];
+				blueBalanceRatio = configFile["BlueBalanceRatio"];
+				redColorAdjustmentHue = configFile["RedColorAdjustmentHue"];
+				yellowColorAdjustmentHue = configFile["YellowColorAdjustmentHue"];
+				greenColorAdjustmentHue = configFile["GreenColorAdjustmentHue"];
+				cyanColorAdjustmentHue = configFile["CyanColorAdjustmentHue"];
+				blueColorAdjustmentHue = configFile["BlueColorAdjustmentHue"];
+				magnetaColorAdjustmentHue = configFile["MagentaColorAdjustmentHue"];
+				redColorAdjustmentSaturation = configFile["RedColorAdjustmentSaturation"];
+				yellowColorAdjustmentSaturation = configFile["YellowColorAdjustmentSaturation"];
+				greenColorAdjustmentSaturation = configFile["GreenColorAdjustmentSaturation"];
+				cyanColorAdjustmentSaturation = configFile["CyanColorAdjustmentSaturation"];
+				blueColorAdjustmentSaturation = configFile["BlueColorAdjustmentSaturation"];
+				magentaColorAdjustmentSaturation = configFile["MagentaColorAdjustmentSaturation"];
+				colorTransformationSelector = configFile["ColorTransformationSelector"];
+				gain00ColorTransformationValue = configFile["Gain00ColorTransformationValue"];
+				gain01ColorTransformationValue = configFile["Gain01ColorTransformationValue"];
+				gain02ColorTransformationValue = configFile["Gain02ColorTransformationValue"];
+				gain10ColorTransformationValue = configFile["Gain10ColorTransformationValue"];
+				gain11ColorTransformationValue = configFile["Gain11ColorTransformationValue"];
+				gain12ColorTransformationValue = configFile["Gain12ColorTransformationValue"];
+				gain20ColorTransformationValue = configFile["Gain20ColorTransformationValue"];
+				gain21ColorTransformationValue = configFile["Gain21ColorTransformationValue"];
+				gain22ColorTransformationValue = configFile["Gain22ColorTransformationValue"];
+				autoTargetBrightness = configFile["AutoTargetBrightness"];
+				autoFunctionProfile = configFile["AutoFunctionProfile"];
+				autoGainLowerLimit = configFile["AutoGainLowerLimit"];
+				autoGainUpperLimit = configFile["AutoGainUpperLimit"];
+				autoExposureTimeLowerLimit = configFile["AutoExposureTimeLowerLimit"];
+				autoExposureTimeUpperLimit = configFile["AutoExposureTimeUpperLimit"];
+
 			}
 			else if (string(argv[i]) == "-aoi")
 			{
@@ -464,9 +559,58 @@ gint main(gint argc, gchar *argv[])
 		GenApi::CEnumerationPtr(camera.GetNodeMap().GetNode("UserSetSelector"))->FromString("Default");
 		GenApi::CCommandPtr(camera.GetNodeMap().GetNode("UserSetLoad"))->Execute();
 
+
 		// Initialize the camera and driver
 		cout << "Initializing camera and driver..." << endl;
-		camera.InitCamera(width, height, frameRate, onDemand, useTrigger, scaledWidth, scaledHeight, rotation, numImagesToRecord);		
+		camera.InitCamera(
+	exposureAuto,
+	balanceWhiteAuto,
+	gainAuto,
+	width, 
+	height, 
+	frameRate,
+	pixelFormat, 
+	lightSourcePreset, 
+	gainSelector, 
+	gain,
+	gammaValue, 
+	redBalanceRatio, 
+	greenBalanceRatio, 
+	blueBalanceRatio, 
+	redColorAdjustmentHue, 
+	yellowColorAdjustmentHue, 
+	greenColorAdjustmentHue, 
+	cyanColorAdjustmentHue, 
+	blueColorAdjustmentHue, 
+	magnetaColorAdjustmentHue, 
+	redColorAdjustmentSaturation, 
+	yellowColorAdjustmentSaturation, 
+	greenColorAdjustmentSaturation, 
+	cyanColorAdjustmentSaturation, 
+	blueColorAdjustmentSaturation, 
+	magentaColorAdjustmentSaturation, 
+	colorTransformationSelector, 
+	gain00ColorTransformationValue, 
+	gain01ColorTransformationValue, 
+	gain02ColorTransformationValue, 
+	gain10ColorTransformationValue, 
+	gain11ColorTransformationValue, 
+	gain12ColorTransformationValue, 
+	gain20ColorTransformationValue, 
+	gain21ColorTransformationValue, 
+	gain22ColorTransformationValue, 
+	autoTargetBrightness,
+	autoFunctionProfile,
+	autoGainLowerLimit,
+	autoGainUpperLimit,
+	autoExposureTimeLowerLimit,
+	autoExposureTimeUpperLimit,
+	onDemand, 
+	useTrigger, 
+	scaledWidth, 
+	scaledHeight, 
+	rotation, 
+	numImagesToRecord);		
 
 		cout << "Using Camera             : " << camera.GetDeviceInfo().GetFriendlyName() << endl;
 		cout << "Camera Area Of Interest  : " << camera.GetWidth() << "x" << camera.GetHeight() << endl;

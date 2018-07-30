@@ -146,7 +146,55 @@ bool CInstantCameraAppSrc::SetFrameRate(double framesPerSecond)
 }
 
 // Open the camera and adjust some settings
-bool CInstantCameraAppSrc::InitCamera(int width, int height, int framesPerSecond, bool useOnDemand, bool useTrigger, int scaledWidth, int scaledHeight, int rotation, int numFramesToGrab)
+bool CInstantCameraAppSrc::InitCamera(
+	string exposureAuto,
+	string balanceWhiteAuto,
+	string gainAuto,
+	int width, 
+	int height, 
+	int framesPerSecond,
+	string pixelFormat, 
+	string lightSourcePreset, 
+	string gainSelector, 
+	double gain, 
+	double gammaValue, 
+	double redBalanceRatio, 
+	double greenBalanceRatio, 
+	double blueBalanceRatio, 
+	double redColorAdjustmentHue, 
+	double yellowColorAdjustmentHue, 
+	double greenColorAdjustmentHue, 
+	double cyanColorAdjustmentHue, 
+	double blueColorAdjustmentHue, 
+	double magnetaColorAdjustmentHue, 
+	double redColorAdjustmentSaturation, 
+	double yellowColorAdjustmentSaturation, 
+	double greenColorAdjustmentSaturation, 
+	double cyanColorAdjustmentSaturation, 
+	double blueColorAdjustmentSaturation, 
+	double magentaColorAdjustmentSaturation, 
+	string colorTransformationSelector, 
+	double gain00ColorTransformationValue, 
+	double gain01ColorTransformationValue, 
+	double gain02ColorTransformationValue, 
+	double gain10ColorTransformationValue, 
+	double gain11ColorTransformationValue, 
+	double gain12ColorTransformationValue, 
+	double gain20ColorTransformationValue, 
+	double gain21ColorTransformationValue, 
+	double gain22ColorTransformationValue, 
+	double autoTargetBrightness,
+	string autoFunctionProfile,
+	double autoGainLowerLimit,
+	double autoGainUpperLimit,
+	double autoExposureTimeLowerLimit,
+	double autoExposureTimeUpperLimit,
+	bool useOnDemand, 
+	bool useTrigger, 
+	int scaledWidth, 
+	int scaledHeight, 
+	int rotation, 
+	int numFramesToGrab)
 {
 	try
 	{
@@ -157,10 +205,56 @@ bool CInstantCameraAppSrc::InitCamera(int width, int height, int framesPerSecond
 		}
 
 		m_isInitialized = false;
-
+		m_exposureAuto = exposureAuto;
+		m_balanceWhiteAuto = balanceWhiteAuto;
+		m_gainAuto = gainAuto;
 		m_width = width;
 		m_height = height;
 		m_frameRate = framesPerSecond;
+		m_pixelFormat = pixelFormat;
+		m_lightSourcePreset = lightSourcePreset;
+
+		m_gainSelector = gainSelector;
+		m_gain = gain;
+
+		m_gammaValue = gammaValue;
+
+		m_redBalanceRatio = redBalanceRatio;
+		m_greenBalanceRatio = greenBalanceRatio;
+		m_blueBalanceRatio = blueBalanceRatio;
+
+		m_redColorAdjustmentHue = redColorAdjustmentHue;
+		m_yellowColorAdjustmentHue = yellowColorAdjustmentHue;
+		m_greenColorAdjustmentHue = greenColorAdjustmentHue;
+		m_cyanColorAdjustmentHue = cyanColorAdjustmentHue;
+		m_blueColorAdjustmentHue = blueColorAdjustmentHue;
+		m_magnetaColorAdjustmentHue = magnetaColorAdjustmentHue;
+
+		m_redColorAdjustmentSaturation = redColorAdjustmentSaturation;
+		m_yellowColorAdjustmentSaturation = yellowColorAdjustmentSaturation;
+		m_greenColorAdjustmentSaturation = greenColorAdjustmentSaturation;
+		m_cyanColorAdjustmentSaturation = cyanColorAdjustmentSaturation;
+		m_blueColorAdjustmentSaturation = blueColorAdjustmentSaturation;
+		m_magentaColorAdjustmentSaturation = magentaColorAdjustmentSaturation;
+
+		m_colorTransformationSelector = colorTransformationSelector;
+		m_gain00ColorTransformationValue = gain00ColorTransformationValue;
+		m_gain01ColorTransformationValue = gain01ColorTransformationValue;
+		m_gain02ColorTransformationValue = gain02ColorTransformationValue;
+		m_gain10ColorTransformationValue = gain10ColorTransformationValue;
+		m_gain11ColorTransformationValue = gain11ColorTransformationValue;
+		m_gain12ColorTransformationValue = gain12ColorTransformationValue;
+		m_gain20ColorTransformationValue = gain20ColorTransformationValue;
+		m_gain21ColorTransformationValue = gain21ColorTransformationValue;
+		m_gain22ColorTransformationValue = gain22ColorTransformationValue;
+
+		m_autoTargetBrightness = autoTargetBrightness;
+		m_autoFunctionProfile = autoFunctionProfile;
+		m_autoGainLowerLimit = autoGainLowerLimit;
+		m_autoGainUpperLimit = autoGainUpperLimit;
+		m_autoExposureTimeLowerLimit = autoExposureTimeLowerLimit;
+		m_autoExposureTimeUpperLimit = autoExposureTimeUpperLimit;
+
 		m_isOnDemand = useOnDemand;
 		m_isTriggered = useTrigger;
 		m_scaledWidth = scaledWidth;
@@ -193,6 +287,26 @@ bool CInstantCameraAppSrc::InitCamera(int width, int height, int framesPerSecond
 		GenApi::CEnumerationPtr(GetNodeMap().GetNode("UserSetSelector"))->FromString("Default");
 		GenApi::CCommandPtr(GetNodeMap().GetNode("UserSetLoad"))->Execute();
 
+		if (m_exposureAuto != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("ExposureAuto"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("ExposureAuto"))->FromString(m_exposureAuto.c_str());
+				}
+		}
+
+		if (m_balanceWhiteAuto != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("BalanceWhiteAuto"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("BalanceWhiteAuto"))->FromString(m_balanceWhiteAuto.c_str());
+				}
+		}
+		if (m_gainAuto != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("GainAuto"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("GainAuto"))->FromString(m_gainAuto.c_str());
+				}
+		}
+
 		if (m_width == -1)
 		{
 			if (IsAvailable(GetNodeMap().GetNode("Width")))
@@ -212,6 +326,236 @@ bool CInstantCameraAppSrc::InitCamera(int width, int height, int framesPerSecond
 		{
 			if (IsAvailable(GetNodeMap().GetNode("Height")))
 				GenApi::CIntegerPtr(GetNodeMap().GetNode("Height"))->SetValue(m_height);
+		}
+
+		if (m_pixelFormat != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("PixelFormat"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("PixelFormat"))->FromString(m_pixelFormat.c_str());
+				}
+		}
+
+		if (m_lightSourcePreset != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("LightSourcePreset"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("LightSourcePreset"))->FromString(m_lightSourcePreset.c_str());
+				}
+		}
+		if ( (m_gainSelector != "") && (m_gain!=0) )
+		{
+			if (IsAvailable(GetNodeMap().GetNode("GainSelector"))){
+				GenApi::CEnumerationPtr ptrGainSelector = GetNodeMap().GetNode("GainSelector");
+				if (IsAvailable(ptrGainSelector->GetEntryByName("All")))
+				{
+					ptrGainSelector->FromString("All");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("Gain"))->SetValue(m_gain);
+				}
+			}
+		}
+
+		if (m_gammaValue != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("Gamma"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("Gamma"))->SetValue(m_gammaValue);
+				}
+		}
+
+		if ((m_redBalanceRatio != -1) && (m_greenBalanceRatio != -1) && (m_blueBalanceRatio != -1) )
+		{
+			if (IsAvailable(GetNodeMap().GetNode("BalanceRatioSelector"))){
+				GenApi::CEnumerationPtr ptrBalanceRatioSelector = GetNodeMap().GetNode("BalanceRatioSelector");
+				if (IsAvailable(ptrBalanceRatioSelector->GetEntryByName("Red")))
+				{
+					ptrBalanceRatioSelector->FromString("Red");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("BalanceRatio"))->SetValue(m_redBalanceRatio);
+				}
+				if (IsAvailable(ptrBalanceRatioSelector->GetEntryByName("Green")))
+				{
+					ptrBalanceRatioSelector->FromString("Green");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("BalanceRatio"))->SetValue(m_greenBalanceRatio);
+				}
+				if (IsAvailable(ptrBalanceRatioSelector->GetEntryByName("Blue")))
+				{
+					ptrBalanceRatioSelector->FromString("Blue");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("BalanceRatio"))->SetValue(m_blueBalanceRatio);
+				}
+			}
+		}
+
+		if ((m_redColorAdjustmentHue != -1) && (m_yellowColorAdjustmentHue != -1) && (m_greenColorAdjustmentHue != -1)  && (m_cyanColorAdjustmentHue != -1) && (m_blueColorAdjustmentHue != -1)  && (m_magnetaColorAdjustmentHue != -1) )
+		{
+			if (IsAvailable(GetNodeMap().GetNode("ColorAdjustmentSelector"))){
+				GenApi::CEnumerationPtr ptrColorAdjustmentSelector = GetNodeMap().GetNode("ColorAdjustmentSelector");
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Red")))
+				{
+					ptrColorAdjustmentSelector->FromString("Red");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentHue"))->SetValue(m_redColorAdjustmentHue);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Yellow")))
+				{
+					ptrColorAdjustmentSelector->FromString("Yellow");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentHue"))->SetValue(m_yellowColorAdjustmentHue);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Green")))
+				{
+					ptrColorAdjustmentSelector->FromString("Green");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentHue"))->SetValue(m_greenColorAdjustmentHue);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Cyan")))
+				{
+					ptrColorAdjustmentSelector->FromString("Cyan");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentHue"))->SetValue(m_cyanColorAdjustmentHue);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Blue")))
+				{
+					ptrColorAdjustmentSelector->FromString("Blue");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentHue"))->SetValue(m_blueColorAdjustmentHue);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Magenta")))
+				{
+					ptrColorAdjustmentSelector->FromString("Magenta");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentHue"))->SetValue(m_magnetaColorAdjustmentHue);
+				}
+			}
+		}
+
+
+
+		if ((m_redColorAdjustmentSaturation != -1) && (m_yellowColorAdjustmentSaturation != -1) && (m_greenColorAdjustmentSaturation != -1)  && (m_cyanColorAdjustmentSaturation != -1) && (m_blueColorAdjustmentSaturation != -1)  && (m_magentaColorAdjustmentSaturation != -1) )
+		{
+			if (IsAvailable(GetNodeMap().GetNode("ColorAdjustmentSelector"))){
+				GenApi::CEnumerationPtr ptrColorAdjustmentSelector = GetNodeMap().GetNode("ColorAdjustmentSelector");
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Red")))
+				{
+					ptrColorAdjustmentSelector->FromString("Red");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentSaturation"))->SetValue(m_redColorAdjustmentSaturation);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Yellow")))
+				{
+					ptrColorAdjustmentSelector->FromString("Yellow");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentSaturation"))->SetValue(m_yellowColorAdjustmentSaturation);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Green")))
+				{
+					ptrColorAdjustmentSelector->FromString("Green");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentSaturation"))->SetValue(m_greenColorAdjustmentSaturation);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Cyan")))
+				{
+					ptrColorAdjustmentSelector->FromString("Cyan");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentSaturation"))->SetValue(m_cyanColorAdjustmentSaturation);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Blue")))
+				{
+					ptrColorAdjustmentSelector->FromString("Blue");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentSaturation"))->SetValue(m_blueColorAdjustmentSaturation);
+				}
+				if (IsAvailable(ptrColorAdjustmentSelector->GetEntryByName("Magenta")))
+				{
+					ptrColorAdjustmentSelector->FromString("Magenta");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorAdjustmentSaturation"))->SetValue(m_magentaColorAdjustmentSaturation);
+				}
+			}
+		}
+
+		if ((m_colorTransformationSelector != "") && (m_gain00ColorTransformationValue != -1) && (m_gain01ColorTransformationValue != -1)  && (m_gain02ColorTransformationValue != -1) && (m_gain10ColorTransformationValue != -1)  && (m_gain11ColorTransformationValue != -1) && (m_gain12ColorTransformationValue != -1)  && (m_gain20ColorTransformationValue != -1) && (m_gain21ColorTransformationValue != -1)  && (m_gain22ColorTransformationValue != -1) )
+		{
+			if (IsAvailable(GetNodeMap().GetNode("ColorTransformationSelector"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("ColorTransformationSelector"))->FromString(m_colorTransformationSelector.c_str());
+			}
+
+			if (IsAvailable(GetNodeMap().GetNode("ColorTransformationValueSelector"))){
+				GenApi::CEnumerationPtr ptrColorTransformationValueSelector = GetNodeMap().GetNode("ColorTransformationValueSelector");
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain00")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain00");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain00ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain01")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain01");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain01ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain02")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain02");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain02ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain10")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain10");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain10ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain11")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain11");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain11ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain12")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain12");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain12ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain20")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain20");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain20ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain21")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain21");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain21ColorTransformationValue);
+				}
+				if (IsAvailable(ptrColorTransformationValueSelector->GetEntryByName("Gain22")))
+				{
+					ptrColorTransformationValueSelector->FromString("Gain22");
+					GenApi::CFloatPtr(GetNodeMap().GetNode("ColorTransformationValue"))->SetValue(m_gain22ColorTransformationValue);
+				}
+			}
+
+		}
+
+
+		if (m_autoTargetBrightness != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("AutoTargetBrightness"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("AutoTargetBrightness"))->SetValue(m_autoTargetBrightness);
+				}
+		}
+
+		if (m_autoFunctionProfile != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("AutoFunctionProfile"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("AutoFunctionProfile"))->FromString(m_autoFunctionProfile.c_str());
+				}
+		}
+
+		if (m_autoGainLowerLimit != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("AutoGainLowerLimit"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("AutoGainLowerLimit"))->SetValue(m_autoGainLowerLimit);
+				}
+		}
+
+		if (m_autoGainUpperLimit != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("AutoGainUpperLimit"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("AutoGainUpperLimit"))->SetValue(m_autoGainUpperLimit);
+				}
+		}
+
+		if (m_autoExposureTimeLowerLimit != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("AutoExposureTimeLowerLimit"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("AutoExposureTimeLowerLimit"))->SetValue(m_autoExposureTimeLowerLimit);
+				}
+		}
+
+		if (m_autoExposureTimeUpperLimit != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("AutoExposureTimeUpperLimit"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("AutoExposureTimeUpperLimit"))->SetValue(m_autoExposureTimeUpperLimit);
+				}
 		}
 
 		if (IsAvailable(GetNodeMap().GetNode("CenterX")))

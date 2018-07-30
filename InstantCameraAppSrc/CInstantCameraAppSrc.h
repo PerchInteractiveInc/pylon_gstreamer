@@ -39,9 +39,48 @@ public:
 	int GetWidth();
 	int GetHeight();
 	bool InitCamera(
+		string exposureAuto,
+		string balanceWhiteAuto,
+		string gainAuto,
 		int width,
 		int height,
 		int framesPerSecond,
+		string pixelFormat,
+		string lightSourcePreset,
+		string gainSelector,
+		double gain,
+		double gammaValue,
+		double redBalanceRatio,
+		double greenBalanceRatio,
+		double blueBalanceRatio,
+		double redColorAdjustmentHue,
+		double yellowColorAdjustmentHue,
+		double greenColorAdjustmentHue,
+		double cyanColorAdjustmentHue,
+		double blueColorAdjustmentHue,
+		double magnetaColorAdjustmentHue,
+		double redColorAdjustmentSaturation,
+		double yellowColorAdjustmentSaturation,
+		double greenColorAdjustmentSaturation,
+		double cyanColorAdjustmentSaturation,
+		double blueColorAdjustmentSaturation,
+		double magentaColorAdjustmentSaturation,
+		string colorTransformationSelector,
+		double gain00ColorTransformationValue,
+		double gain01ColorTransformationValue,
+		double gain02ColorTransformationValue,
+		double gain10ColorTransformationValue,
+		double gain11ColorTransformationValue,
+		double gain12ColorTransformationValue,
+		double gain20ColorTransformationValue,
+		double gain21ColorTransformationValue,
+		double gain22ColorTransformationValue,
+		double autoTargetBrightness,
+		string autoFunctionProfile,
+		double autoGainLowerLimit,
+		double autoGainUpperLimit,
+		double autoExposureTimeLowerLimit,
+		double autoExposureTimeUpperLimit,
 		bool useOnDemand,
 		bool useTrigger,
 		int scaledWidth = -1,
@@ -56,9 +95,48 @@ public:
 	GstElement* GetSource();	
 	
 private:
+	string m_exposureAuto;
+	string m_balanceWhiteAuto;
+	string m_gainAuto;
 	int m_width;
 	int m_height;
 	int m_frameRate;
+	string m_pixelFormat;
+	string m_lightSourcePreset;
+	string m_gainSelector;
+	double m_gain;
+	double m_gammaValue;
+	double m_redBalanceRatio;
+	double m_greenBalanceRatio;
+	double m_blueBalanceRatio;
+	double m_redColorAdjustmentHue;
+	double m_yellowColorAdjustmentHue;
+	double m_greenColorAdjustmentHue;
+	double m_cyanColorAdjustmentHue;
+	double m_blueColorAdjustmentHue;
+	double m_magnetaColorAdjustmentHue;
+	double m_redColorAdjustmentSaturation;
+	double m_yellowColorAdjustmentSaturation;
+	double m_greenColorAdjustmentSaturation;
+	double m_cyanColorAdjustmentSaturation;
+	double m_blueColorAdjustmentSaturation;
+	double m_magentaColorAdjustmentSaturation;
+	string m_colorTransformationSelector;
+	double m_gain00ColorTransformationValue;
+	double m_gain01ColorTransformationValue;
+	double m_gain02ColorTransformationValue;
+	double m_gain10ColorTransformationValue;
+	double m_gain11ColorTransformationValue;
+	double m_gain12ColorTransformationValue;
+	double m_gain20ColorTransformationValue;
+	double m_gain21ColorTransformationValue;
+	double m_gain22ColorTransformationValue;
+	double m_autoTargetBrightness;
+	string m_autoFunctionProfile;
+	double m_autoGainLowerLimit;
+	double m_autoGainUpperLimit;
+	double m_autoExposureTimeLowerLimit;
+	double m_autoExposureTimeUpperLimit;
 	int m_scaledWidth;
 	int m_scaledHeight;
 	int m_rotation;
