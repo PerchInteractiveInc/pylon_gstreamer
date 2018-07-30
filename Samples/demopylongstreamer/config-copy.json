@@ -1,7 +1,11 @@
 {
+ "ExposureAuto": "Continuous",
+ "BalanceWhiteAuto": "Off",
+ "GainAuto": "Off",
  "Width":1920,
  "Height":1080,
  "FrameRate":30,
+ "PixelFormat": "RGB8",
  "GainSelector": "All",
  "Gain": 7.70000,
  "Gamma":0.95000,
@@ -31,4 +35,10 @@
  "Gain20ColorTransformationValue":0.25000,
  "Gain21ColorTransformationValue":-1.28125,
  "Gain22ColorTransformationValue":2.03125,
+ "AutoTargetBrightness":0.30196,
+ "AutoFunctionProfile":"MinimizeGain",
+ "AutoGainLowerLimit":0.00000,
+ "AutoGainUpperLimit":18.00000,
+ "AutoExposureTimeLowerLimit":76.0,
+ "AutoExposureTimeUpperLimit":30000.0
 }

@@ -175,10 +175,10 @@ void IntHandler(int dummy)
 
 // *********** Command line argument variables and parser **************
 // quick-start settings for AOI and framerate. Use maximum possible camera resultion and maximum possible framerate @ resolution.
+string configInput = "";
 int width = -1;
 int height = -1;
 int frameRate = -1;
-
 int numImagesToRecord = -1; // capture indefinitley unless otherwise specified.
 int scaledWidth = -1; // do not scale by default
 int scaledHeight = -1;
@@ -314,7 +314,13 @@ int ParseCommandLine(gint argc, gchar *argv[])
 			}
 			if (string(argv[i]) == "-json")
 			{
-				std::ifstream i("config.json");
+				if((argv[ i + 1] != NULL) && (string(argv[i + 1]).find("-") != 0 )){
+					configInput = argv[ i + 1];
+				}
+				else{
+					configInput = "config.json";
+				}
+				std::ifstream i(configInput);
 				i >> configFile;
 				exposureAuto = configFile["ExposureAuto"];
 				balanceWhiteAuto = configFile["BalanceWhiteAuto"];
