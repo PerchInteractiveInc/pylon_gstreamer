@@ -17,7 +17,7 @@
 
 	THIS SOFTWARE REQUIRES ADDITIONAL SOFTWARE (IE: LIBRARIES) IN ORDER TO COMPILE
 	INTO BINARY FORM AND TO FUNCTION IN BINARY FORM. ANY SUCH ADDITIONAL SOFTWARE
-	IS OUTSIDE THE SCOPE OF THIS LICENSE.	
+	IS OUTSIDE THE SCOPE OF THIS LICENSE.
 
 */
 
@@ -81,6 +81,8 @@ public:
 		double autoGainUpperLimit,
 		double autoExposureTimeLowerLimit,
 		double autoExposureTimeUpperLimit,
+		string exposureMode,
+		double exposureTime,
 		bool useOnDemand,
 		bool useTrigger,
 		int scaledWidth = -1,
@@ -92,8 +94,8 @@ public:
 	bool CloseCamera();
 	bool SetFrameRate(double framesPerSecond);
 	double GetFrameRate();
-	GstElement* GetSource();	
-	
+	GstElement* GetSource();
+
 private:
 	string m_exposureAuto;
 	string m_balanceWhiteAuto;
@@ -137,6 +139,8 @@ private:
 	double m_autoGainUpperLimit;
 	double m_autoExposureTimeLowerLimit;
 	double m_autoExposureTimeUpperLimit;
+	string m_exposureMode;
+	double m_exposureTime;
 	int m_scaledWidth;
 	int m_scaledHeight;
 	int m_rotation;

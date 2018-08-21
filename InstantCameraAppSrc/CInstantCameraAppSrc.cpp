@@ -150,50 +150,52 @@ bool CInstantCameraAppSrc::InitCamera(
 	string exposureAuto,
 	string balanceWhiteAuto,
 	string gainAuto,
-	int width, 
-	int height, 
+	int width,
+	int height,
 	int framesPerSecond,
-	string pixelFormat, 
-	string lightSourcePreset, 
-	string gainSelector, 
-	double gain, 
-	double gammaValue, 
-	double redBalanceRatio, 
-	double greenBalanceRatio, 
-	double blueBalanceRatio, 
-	double redColorAdjustmentHue, 
-	double yellowColorAdjustmentHue, 
-	double greenColorAdjustmentHue, 
-	double cyanColorAdjustmentHue, 
-	double blueColorAdjustmentHue, 
-	double magnetaColorAdjustmentHue, 
-	double redColorAdjustmentSaturation, 
-	double yellowColorAdjustmentSaturation, 
-	double greenColorAdjustmentSaturation, 
-	double cyanColorAdjustmentSaturation, 
-	double blueColorAdjustmentSaturation, 
-	double magentaColorAdjustmentSaturation, 
-	string colorTransformationSelector, 
-	double gain00ColorTransformationValue, 
-	double gain01ColorTransformationValue, 
-	double gain02ColorTransformationValue, 
-	double gain10ColorTransformationValue, 
-	double gain11ColorTransformationValue, 
-	double gain12ColorTransformationValue, 
-	double gain20ColorTransformationValue, 
-	double gain21ColorTransformationValue, 
-	double gain22ColorTransformationValue, 
+	string pixelFormat,
+	string lightSourcePreset,
+	string gainSelector,
+	double gain,
+	double gammaValue,
+	double redBalanceRatio,
+	double greenBalanceRatio,
+	double blueBalanceRatio,
+	double redColorAdjustmentHue,
+	double yellowColorAdjustmentHue,
+	double greenColorAdjustmentHue,
+	double cyanColorAdjustmentHue,
+	double blueColorAdjustmentHue,
+	double magnetaColorAdjustmentHue,
+	double redColorAdjustmentSaturation,
+	double yellowColorAdjustmentSaturation,
+	double greenColorAdjustmentSaturation,
+	double cyanColorAdjustmentSaturation,
+	double blueColorAdjustmentSaturation,
+	double magentaColorAdjustmentSaturation,
+	string colorTransformationSelector,
+	double gain00ColorTransformationValue,
+	double gain01ColorTransformationValue,
+	double gain02ColorTransformationValue,
+	double gain10ColorTransformationValue,
+	double gain11ColorTransformationValue,
+	double gain12ColorTransformationValue,
+	double gain20ColorTransformationValue,
+	double gain21ColorTransformationValue,
+	double gain22ColorTransformationValue,
 	double autoTargetBrightness,
 	string autoFunctionProfile,
 	double autoGainLowerLimit,
 	double autoGainUpperLimit,
 	double autoExposureTimeLowerLimit,
 	double autoExposureTimeUpperLimit,
-	bool useOnDemand, 
-	bool useTrigger, 
-	int scaledWidth, 
-	int scaledHeight, 
-	int rotation, 
+	string exposureMode,
+	double exposureTime,
+	bool useOnDemand,
+	bool useTrigger,
+	int scaledWidth,
+	int scaledHeight,
+	int rotation,
 	int numFramesToGrab)
 {
 	try
@@ -254,6 +256,9 @@ bool CInstantCameraAppSrc::InitCamera(
 		m_autoGainUpperLimit = autoGainUpperLimit;
 		m_autoExposureTimeLowerLimit = autoExposureTimeLowerLimit;
 		m_autoExposureTimeUpperLimit = autoExposureTimeUpperLimit;
+
+		m_exposureMode = exposureMode;
+		m_exposureTime = exposureTime;
 
 		m_isOnDemand = useOnDemand;
 		m_isTriggered = useTrigger;
@@ -332,6 +337,20 @@ bool CInstantCameraAppSrc::InitCamera(
 		{
 			if (IsAvailable(GetNodeMap().GetNode("PixelFormat"))){
 				GenApi::CEnumerationPtr(GetNodeMap().GetNode("PixelFormat"))->FromString(m_pixelFormat.c_str());
+				}
+		}
+
+		if (m_exposureMode != "")
+		{
+			if (IsAvailable(GetNodeMap().GetNode("ExposureMode"))){
+				GenApi::CEnumerationPtr(GetNodeMap().GetNode("ExposureMode"))->FromString(m_exposureMode.c_str());
+				}
+		}
+
+		if (m_exposureTime != -1)
+		{
+			if (IsAvailable(GetNodeMap().GetNode("ExposureTime"))){
+				GenApi::CFloatPtr(GetNodeMap().GetNode("ExposureTime"))->SetValue(m_exposureTime);
 				}
 		}
 

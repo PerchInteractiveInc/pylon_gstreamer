@@ -20,7 +20,7 @@
 	THIS SOFTWARE REQUIRES ADDITIONAL SOFTWARE (IE: LIBRARIES) IN ORDER TO COMPILE
 	INTO BINARY FORM AND TO FUNCTION IN BINARY FORM. ANY SUCH ADDITIONAL SOFTWARE
 	IS OUTSIDE THE SCOPE OF THIS LICENSE.
-	
+
 
 	DemoPylonGStreamer:
 	Demo of InstantCameraAppSrc class (and PipelineHelper).
@@ -59,10 +59,10 @@
 
 	Quick-Start Example:
 	demopylongstreamer -window
-	
+
 	NVIDIA TX1/TX2 Note:
 	When using autovideosink for display, the system-preferred built-in videosink plugin does advertise the formats it supports. So the image must be converted manually.
-	For an example of how to do this, see CPipelineHelper::build_pipeline_display(). 
+	For an example of how to do this, see CPipelineHelper::build_pipeline_display().
 	If you are using demopylongstreamer with the -parse argument in order to use your own pipeline, add a caps filter after the normal videoconvert and before autovideosink:
 	./demopylongstreamer -parse "gst-launch-1.0 videotestsrc ! videoflip method=vertical-flip ! videoconvert ! video/x-raw,format=I420 ! autovideosink"
 
@@ -115,10 +115,10 @@ gboolean bus_call(GstBus *bus, GstMessage *msg, gpointer data)
 			gst_message_parse_error(msg, &error, &debug);
             g_printerr ("ERROR from element %s: %s\n", GST_OBJECT_NAME (msg->src), error->message);
             g_printerr ("Debugging info: %s\n", (debug) ? debug : "none");
-      
+
 			g_error_free(error);
             g_free(debug);
-      
+
 			g_main_loop_quit(loop);
 			break;
 		}
@@ -237,6 +237,8 @@ double autoGainLowerLimit = -1;
 double autoGainUpperLimit = -1;
 double autoExposureTimeLowerLimit = -1;
 double autoExposureTimeUpperLimit = -1;
+string exposureMode = "";
+double exposureTime = -1;
 
 
 int ParseCommandLine(gint argc, gchar *argv[])
@@ -329,7 +331,7 @@ int ParseCommandLine(gint argc, gchar *argv[])
 				height =  configFile["Height"];
 				frameRate =  configFile["FrameRate"];
 				pixelFormat = configFile["PixelFormat"];
-				gainSelector = configFile["GainSelector"];				
+				gainSelector = configFile["GainSelector"];
 				gain = configFile["Gain"];
 				gammaValue = configFile["Gamma"];
 				lightSourcePreset = configFile["LightSourcePreset"];
@@ -364,6 +366,9 @@ int ParseCommandLine(gint argc, gchar *argv[])
 				autoGainUpperLimit = configFile["AutoGainUpperLimit"];
 				autoExposureTimeLowerLimit = configFile["AutoExposureTimeLowerLimit"];
 				autoExposureTimeUpperLimit = configFile["AutoExposureTimeUpperLimit"];
+				exposureMode = configFile["ExposureMode"];
+				exposureTime = configFile["ExposureTime"];
+
 
 			}
 			else if (string(argv[i]) == "-aoi")
@@ -509,7 +514,7 @@ int ParseCommandLine(gint argc, gchar *argv[])
 					cout << "Height not specified. eg: -height 480" << endl;
 					return -1;
 				}
-			}			
+			}
 		}
 
 		if (display == false && framebuffer == false && h264file == false && h264stream == false && parsestring == false)
@@ -551,7 +556,7 @@ gint main(gint argc, gchar *argv[])
 
 		cout << "Press CTRL+C at any time to quit." << endl;
 
-		// initialize GStreamer 
+		// initialize GStreamer
 		gst_init(NULL, NULL);
 
 		// create the mainloop
@@ -572,51 +577,53 @@ gint main(gint argc, gchar *argv[])
 	exposureAuto,
 	balanceWhiteAuto,
 	gainAuto,
-	width, 
-	height, 
+	width,
+	height,
 	frameRate,
-	pixelFormat, 
-	lightSourcePreset, 
-	gainSelector, 
+	pixelFormat,
+	lightSourcePreset,
+	gainSelector,
 	gain,
-	gammaValue, 
-	redBalanceRatio, 
-	greenBalanceRatio, 
-	blueBalanceRatio, 
-	redColorAdjustmentHue, 
-	yellowColorAdjustmentHue, 
-	greenColorAdjustmentHue, 
-	cyanColorAdjustmentHue, 
-	blueColorAdjustmentHue, 
-	magnetaColorAdjustmentHue, 
-	redColorAdjustmentSaturation, 
-	yellowColorAdjustmentSaturation, 
-	greenColorAdjustmentSaturation, 
-	cyanColorAdjustmentSaturation, 
-	blueColorAdjustmentSaturation, 
-	magentaColorAdjustmentSaturation, 
-	colorTransformationSelector, 
-	gain00ColorTransformationValue, 
-	gain01ColorTransformationValue, 
-	gain02ColorTransformationValue, 
-	gain10ColorTransformationValue, 
-	gain11ColorTransformationValue, 
-	gain12ColorTransformationValue, 
-	gain20ColorTransformationValue, 
-	gain21ColorTransformationValue, 
-	gain22ColorTransformationValue, 
+	gammaValue,
+	redBalanceRatio,
+	greenBalanceRatio,
+	blueBalanceRatio,
+	redColorAdjustmentHue,
+	yellowColorAdjustmentHue,
+	greenColorAdjustmentHue,
+	cyanColorAdjustmentHue,
+	blueColorAdjustmentHue,
+	magnetaColorAdjustmentHue,
+	redColorAdjustmentSaturation,
+	yellowColorAdjustmentSaturation,
+	greenColorAdjustmentSaturation,
+	cyanColorAdjustmentSaturation,
+	blueColorAdjustmentSaturation,
+	magentaColorAdjustmentSaturation,
+	colorTransformationSelector,
+	gain00ColorTransformationValue,
+	gain01ColorTransformationValue,
+	gain02ColorTransformationValue,
+	gain10ColorTransformationValue,
+	gain11ColorTransformationValue,
+	gain12ColorTransformationValue,
+	gain20ColorTransformationValue,
+	gain21ColorTransformationValue,
+	gain22ColorTransformationValue,
 	autoTargetBrightness,
 	autoFunctionProfile,
 	autoGainLowerLimit,
 	autoGainUpperLimit,
 	autoExposureTimeLowerLimit,
 	autoExposureTimeUpperLimit,
-	onDemand, 
-	useTrigger, 
-	scaledWidth, 
-	scaledHeight, 
-	rotation, 
-	numImagesToRecord);		
+	exposureMode,
+	exposureTime,
+	onDemand,
+	useTrigger,
+	scaledWidth,
+	scaledHeight,
+	rotation,
+	numImagesToRecord);
 
 		cout << "Using Camera             : " << camera.GetDeviceInfo().GetFriendlyName() << endl;
 		cout << "Camera Area Of Interest  : " << camera.GetWidth() << "x" << camera.GetHeight() << endl;
@@ -636,9 +643,9 @@ gint main(gint argc, gchar *argv[])
 
 		// A pipeline needs a source element. The InstantCameraForAppSrc will create, configure, and provide an AppSrc which fits the camera.
 		GstElement *source = camera.GetSource();
-		
+
 		// Build the rest of the pipeline based on the sample chosen.
-		// The PipelineHelper will manage the configuration of GStreamer pipelines.  
+		// The PipelineHelper will manage the configuration of GStreamer pipelines.
 		// The pipeline helper can be expanded to create several kinds of pipelines
 		// as these can depend heavily on the application and host capabilities.
 		// Rescaling the image is optional. In this sample we do rescaling and rotation in the InstantCameraAppSrc.
@@ -669,7 +676,7 @@ gint main(gint argc, gchar *argv[])
 			exitCode = -1;
 			throw std::runtime_error("Could not start camera!");
 		}
-		
+
 		// Start the pipeline.
 		cout << "Starting pipeline..." << endl;
 		gst_element_set_state(pipeline, GST_STATE_PLAYING);
@@ -684,7 +691,7 @@ gint main(gint argc, gchar *argv[])
 
 		camera.StopCamera();
 		camera.CloseCamera();
-		
+
 		gst_object_unref(GST_OBJECT(pipeline));
 		g_main_loop_unref(loop);
 
@@ -702,10 +709,10 @@ gint main(gint argc, gchar *argv[])
 		cerr << "An exception occurred in main(): " << endl << e.what() << endl;
 		exitCode = -1;
 	}
-	
+
 	// Comment the following two lines to disable waiting on exit.
 	cerr << endl << "Press Enter to exit." << endl;
 	while (cin.get() != '\n');
-	
+
 	return exitCode;
 }
